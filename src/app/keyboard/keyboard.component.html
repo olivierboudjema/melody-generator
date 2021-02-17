@@ -1,0 +1,35 @@
+<div>
+  <div id="p-wrapper">
+    <ul id="piano">
+      <li *ngFor="let pianoKey of pianoKeys">
+        <div class="anchor" [ngClass]="pianoKey.status ? 'clicked' : 'notClicked'"
+             [style.background]="getColor(pianoKey.whiteKeyId)"
+             (click)="keyPress(pianoKey.whiteKeyId, pianoKey); changeStatus(pianoKey)">
+        </div>
+        <span *ngIf="pianoKey.blackKeyId" [style.background]="getColor(pianoKey.blackKeyId)"
+              (click)="keyPress(pianoKey.blackKeyId, pianoKey)"></span>
+      </li>
+    </ul>
+  </div>
+  <br>
+  <br>
+  <div style="background-color: white; padding: 24px;">
+    <span *ngFor="let key of keyArray">{{ key.name }} &nbsp; </span>
+    <br>
+    <br>
+    <br>
+    <span class="someSpace">Start key: {{selectedStartKey.name}}</span>
+    <select style="margin-right: 16px;" [(ngModel)]="selectedStartKey">
+      <option *ngFor="let key of keyNameArray" [ngValue]="key">{{key.name}}</option>
+    </select>
+    <span class="someSpace">Nb of keys:</span>
+    <input type="number" style="margin-right: 16px;" [(ngModel)]="selectedNbOfKeys" name="selectedBpm" step="1" min="1" max="15">
+    <span class="someSpace">BPM:</span>
+    <input type="number" style="margin-right: 16px;" [(ngModel)]="selectedBpm" name="selectedBpm" step="1" min="0" max="300">
+
+    <!--    <span class="someSpace"><button>Replay</button></span>-->
+    <span class="someSpace" (click)="playRandomKeys(selectedBpm, selectedNbOfKeys)"><button>Regenerate</button></span>
+    <span class="someSpace" (click)="clearKeyArray()"><button>Clear</button></span>
+    <!--    <span class="someSpace"><button>Save .mid</button></span>-->
+  </div>
+</div>

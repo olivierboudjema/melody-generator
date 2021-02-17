@@ -1,0 +1,13 @@
+<div id="container">
+  <div style="display: flex; align-items: center">
+    <h1>MELODY GENERATOR</h1>
+    <a href="https://soundcloud.com/olivier-boudjema" style="float: right; margin-left: auto">https://soundcloud.com/olivier-boudjema</a>
+  </div>
+  <div id="notation-component">
+    <notation [mode]="mode"></notation>
+  </div>
+  <div id="keyboard-component">
+    <keyboard (keyPlayed)="handleKeyPlayed($event)" (clearKeyArrayEmitter)="handleClearNotation($event)"></keyboard>
+  </div>
+</div>
+

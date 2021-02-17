@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node server.js",
     "build": "ng build",
+    "heroku-postbuild": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -12,17 +13,19 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~8.2.14",
     "@angular-devkit/build-angular": "~0.803.21",
+    "@angular/animations": "~8.2.14",
     "@angular/cli": "~8.3.21",
-    "@angular/compiler-cli": "~8.2.14",
     "@angular/common": "~8.2.14",
     "@angular/compiler": "~8.2.14",
+    "@angular/compiler-cli": "~8.2.14",
     "@angular/core": "~8.2.14",
     "@angular/forms": "~8.2.14",
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
+    "express": "^4.17.1",
+    "path": "^0.12.7",
     "rxjs": "~6.4.0",
     "rxjs-compat": "^6.5.4",
     "tslib": "^1.10.0",
@@ -46,5 +49,9 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0"
+  },
+  "engines": {
+    "node": "v14.0.0",
+    "npm": "6.14.4"
   }
 }

@@ -29,10 +29,22 @@ export class KeyboardComponent implements OnInit {
     };
 
   keyNameArray: Key[] = [
-    {id: 16, name: 'C0'}, {id: 18, name: 'D0'}, {id: 20, name: 'E0'}, {id: 21, name: 'F0'}, {id: 23, name: 'G0'}, {id: 25, name: 'A0'}, {id: 27, name: 'B0'},
-    {id: 28, name: 'C1'}, {id: 30, name: 'D1'}, {id: 32, name: 'E1'}, {id: 33, name: 'F1'}, {id: 35, name: 'G1'}, {id: 37, name: 'A1'}, {id: 39, name: 'B1'},
-    {id: 40, name: 'C2'}, {id: 42, name: 'D2'}, {id: 44, name: 'E2'}, {id: 45, name: 'F2'}, {id: 47, name: 'G2'}, {id: 49, name: 'A2'}, {id: 51, name: 'B2'},
-    {id: 52, name: 'C3'}, {id: 54, name: 'D3'}, {id: 56, name: 'E3'}, {id: 57, name: 'F3'}, {id: 59, name: 'G3'}, {id: 61, name: 'A3'}, {id: 63, name: 'B3'},
+    {id: 16, name: 'C0'}, {id: 18, name: 'D0'}, {id: 20, name: 'E0'}, {id: 21, name: 'F0'}, {id: 23, name: 'G0'}, {
+      id: 25,
+      name: 'A0'
+    }, {id: 27, name: 'B0'},
+    {id: 28, name: 'C1'}, {id: 30, name: 'D1'}, {id: 32, name: 'E1'}, {id: 33, name: 'F1'}, {id: 35, name: 'G1'}, {
+      id: 37,
+      name: 'A1'
+    }, {id: 39, name: 'B1'},
+    {id: 40, name: 'C2'}, {id: 42, name: 'D2'}, {id: 44, name: 'E2'}, {id: 45, name: 'F2'}, {id: 47, name: 'G2'}, {
+      id: 49,
+      name: 'A2'
+    }, {id: 51, name: 'B2'},
+    {id: 52, name: 'C3'}, {id: 54, name: 'D3'}, {id: 56, name: 'E3'}, {id: 57, name: 'F3'}, {id: 59, name: 'G3'}, {
+      id: 61,
+      name: 'A3'
+    }, {id: 63, name: 'B3'},
     {id: 64, name: 'C4'},
   ];
 
@@ -97,6 +109,22 @@ export class KeyboardComponent implements OnInit {
         clearInterval(myLoopInterval);
       }
     }, this.bpmToMs(nbBpm));
+  }
+
+  private replayMelody(nbBpm, nbOfKeys) {
+    const saveOldArray = this.keyArray;
+    this.clearKeyArray();
+    let i = 0;
+    const myLoopInterval = setInterval(() => {
+      const key = this.pianoKeys.find(k => k.whiteKeyId === this.randomKey);
+      this.keyPress(saveOldArray[i].id, key);
+      i++;
+
+      if (i > nbOfKeys) {
+        clearInterval(myLoopInterval);
+      }
+    }, this.bpmToMs(nbBpm));
+
   }
 
   /// MELODY INTELLIGENCE ///

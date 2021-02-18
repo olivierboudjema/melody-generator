@@ -31,6 +31,7 @@
     <input type="number" style="margin-right: 16px;" [(ngModel)]="selectedBpm" name="selectedBpm" step="1" min="0" max="300">
 
     <!--    <span class="someSpace"><button>Replay</button></span>-->
+    <span class="someSpace" (click)="replayMelody(selectedBpm, selectedNbOfKeys)"><button>Replay</button></span>
     <span class="someSpace" (click)="playRandomKeys(selectedBpm, selectedNbOfKeys)"><button>Regenerate</button></span>
     <span class="someSpace" (click)="clearKeyArray()"><button>Clear</button></span>
     <!--    <span class="someSpace"><button>Save .mid</button></span>-->

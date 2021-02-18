@@ -19,9 +19,12 @@
     <br>
     <br>
     <span class="someSpace">Start key: {{selectedStartKey.name}}</span>
-    <select style="margin-right: 16px;" [(ngModel)]="selectedStartKey">
+    <span class="someSpace" style="vertical-align: text-top;">
+    <select style="margin-right: 8px; margin-left: -8px;" [(ngModel)]="selectedStartKey">
       <option *ngFor="let key of keyNameArray" [ngValue]="key">{{key.name}}</option>
     </select>
+
+    </span>
     <span class="someSpace">Nb of keys:</span>
     <input type="number" style="margin-right: 16px;" [(ngModel)]="selectedNbOfKeys" name="selectedBpm" step="1" min="1" max="15">
     <span class="someSpace">BPM:</span>

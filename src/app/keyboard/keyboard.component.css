@@ -169,3 +169,10 @@ ul#piano li span:active {
 .notClicked {
   /*background: #f44336 !important;*/
 }
+
+.key {
+  border: 4px solid;
+  border-radius: 8px;
+  margin-right: 20px;
+  padding: 2px;
+}

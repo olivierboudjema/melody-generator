@@ -13,9 +13,10 @@ export class KeyboardComponent implements OnInit {
   @Output() keyPlayed = new EventEmitter<number>();
   @Output() clearKeyArrayEmitter = new EventEmitter<number>();
 
-  selectedBpm = 120;
-  selectedNbOfKeys = 15;
-  selectedStartKey = {id: 40, name: 'C2'};
+  selectedBpm = 130;
+  selectedNbOfKeys = 10;
+  selectedStartKey = {id: 52, name: 'C3'};
+  editMode = false;
 
   randomKey = 40;
   keyArray: Key[] = [];
@@ -116,7 +117,7 @@ export class KeyboardComponent implements OnInit {
     this.clearKeyArray();
     let i = 0;
     const myLoopInterval = setInterval(() => {
-      const key = this.pianoKeys.find(k => k.whiteKeyId === this.randomKey);
+      const key = this.pianoKeys.find(k => k.whiteKeyId === saveOldArray[i].id);
       this.keyPress(saveOldArray[i].id, key);
       i++;
 
@@ -135,7 +136,7 @@ export class KeyboardComponent implements OnInit {
   }
 
   private isCloseOfPrevious(nb: number): boolean {
-    return (nb >= (this.lastKeyPlayed() - 3)) && (nb <= (this.lastKeyPlayed() + 3));
+    return (nb >= (this.lastKeyPlayed() - 5)) && (nb <= (this.lastKeyPlayed() + 5));
   }
 
   private isBlack(nb: number): boolean {
@@ -152,7 +153,6 @@ export class KeyboardComponent implements OnInit {
   keyPress(keyNumber: number, key: IPianoKey) {
     this.keyPlayed.emit(keyNumber);
     this.saveKeyInArray(keyNumber);
-    // key.status = !key.status;
     this.changeStatus(key);
   }
 
@@ -168,7 +168,7 @@ export class KeyboardComponent implements OnInit {
     key.status = true;
     setTimeout(() => {
       key.status = false;
-    }, 500);
+    }, 200);
   }
 
   /// CONFIG ///
@@ -189,5 +189,11 @@ export class KeyboardComponent implements OnInit {
   private clearKeyArray() {
     this.clearKeyArrayEmitter.emit(10);
     this.keyArray = [];
+  }
+
+  private onChangeKey(key, i, currentKey) {
+    const keyToChange = this.keyNameArray.find(k => k.name === key);
+    currentKey = keyToChange;
+    this.keyArray[i] = keyToChange;
   }
 }

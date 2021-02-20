@@ -14,7 +14,18 @@
   <br>
   <br>
   <div style="background-color: white; padding: 24px;">
-    <span *ngFor="let key of keyArray">{{ key.name }} &nbsp; </span>
+    <div>
+      <span class="key" *ngFor="let key of keyArray"><b>{{ key.name }}</b></span>
+    </div>
+    <div *ngIf="editMode">
+      <br>
+      <span *ngFor="let key of keyArray; let i = index">
+        <select style="margin-right: 10px;" [(ngModel)]="key"
+                (change)="onChangeKey($event.target.value, i, currentKey)">
+          <option *ngFor="let myKey of keyNameArray">{{myKey.name}}</option>
+        </select>
+      </span>
+    </div>
     <br>
     <br>
     <br>
@@ -26,14 +37,17 @@
 
     </span>
     <span class="someSpace">Nb of keys:</span>
-    <input type="number" style="margin-right: 16px;" [(ngModel)]="selectedNbOfKeys" name="selectedBpm" step="1" min="1" max="15">
+    <input type="number" style="margin-right: 16px;" [(ngModel)]="selectedNbOfKeys" name="selectedBpm" step="1" min="1"
+           max="15">
     <span class="someSpace">BPM:</span>
-    <input type="number" style="margin-right: 16px;" [(ngModel)]="selectedBpm" name="selectedBpm" step="1" min="0" max="300">
+    <input type="number" style="margin-right: 16px;" [(ngModel)]="selectedBpm" name="selectedBpm" step="1" min="0"
+           max="300">
 
     <!--    <span class="someSpace"><button>Replay</button></span>-->
-    <span class="someSpace" (click)="replayMelody(selectedBpm, selectedNbOfKeys)"><button>Replay</button></span>
-    <span class="someSpace" (click)="playRandomKeys(selectedBpm, selectedNbOfKeys)"><button>Regenerate</button></span>
-    <span class="someSpace" (click)="clearKeyArray()"><button>Clear</button></span>
+    <span class="someSpace" (click)="replayMelody(selectedBpm, selectedNbOfKeys); editMode = false;"><button>Replay</button></span>
+    <span class="someSpace" (click)="editMode = !editMode"><button>Edit keys</button></span>
+    <span class="someSpace" (click)="playRandomKeys(selectedBpm, selectedNbOfKeys); editMode = false;"><button>Regenerate</button></span>
+    <span class="someSpace" (click)="clearKeyArray(); editMode = false;"><button>Clear</button></span>
     <!--    <span class="someSpace"><button>Save .mid</button></span>-->
   </div>
 </div>

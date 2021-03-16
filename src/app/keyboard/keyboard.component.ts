@@ -14,7 +14,7 @@ export class KeyboardComponent implements OnInit {
   @Output() clearKeyArrayEmitter = new EventEmitter<number>();
 
   selectedBpm = 130;
-  selectedNbOfKeys = 10;
+  selectedNbOfKeys = 8;
   selectedStartKey = {id: 52, name: 'C3'};
   editMode = false;
 
@@ -48,7 +48,6 @@ export class KeyboardComponent implements OnInit {
     }, {id: 63, name: 'B3'},
     {id: 64, name: 'C4'},
   ];
-
 
   blackKeys: number[] = [17, 19, 22, 24, 26, 29, 31, 34, 36, 38, 41, 43, 46, 48, 50, 53, 55, 58, 60, 62];
 
@@ -95,8 +94,9 @@ export class KeyboardComponent implements OnInit {
 
   private playRandomKeys(nbBpm, nbOfKeys) {
     this.clearKeyArray();
+    const key = this.pianoKeys.find(k => k.whiteKeyId === this.selectedStartKey.id);
+    this.keyPress(this.selectedStartKey.id, key);
     let i = 0;
-    this.saveKeyInArray(this.selectedStartKey.id);
     const myLoopInterval = setInterval(() => {
       let condition = this.getRandomKey(this.randomKey);
       while (condition === false) {
@@ -105,8 +105,9 @@ export class KeyboardComponent implements OnInit {
       const key = this.pianoKeys.find(k => k.whiteKeyId === this.randomKey);
       this.keyPress(this.randomKey, key);
       i++;
-
-      if (i > nbOfKeys) {
+      console.log(i);
+      console.log('this.keyArray: ', this.keyArray);
+      if (i >= nbOfKeys - 1) {
         clearInterval(myLoopInterval);
       }
     }, this.bpmToMs(nbBpm));
@@ -121,7 +122,7 @@ export class KeyboardComponent implements OnInit {
       this.keyPress(saveOldArray[i].id, key);
       i++;
 
-      if (i > nbOfKeys) {
+      if (i >= nbOfKeys) {
         clearInterval(myLoopInterval);
       }
     }, this.bpmToMs(nbBpm));
@@ -168,7 +169,7 @@ export class KeyboardComponent implements OnInit {
     key.status = true;
     setTimeout(() => {
       key.status = false;
-    }, 200);
+    }, 1000);
   }
 
   /// CONFIG ///

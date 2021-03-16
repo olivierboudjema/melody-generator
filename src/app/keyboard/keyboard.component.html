@@ -4,7 +4,7 @@
       <li *ngFor="let pianoKey of pianoKeys">
         <div class="anchor" [ngClass]="pianoKey.status ? 'clicked' : 'notClicked'"
              [style.background]="getColor(pianoKey.whiteKeyId)"
-             (click)="keyPress(pianoKey.whiteKeyId, pianoKey); changeStatus(pianoKey)">
+             (click)="keyPress(pianoKey.whiteKeyId, pianoKey); saveKeyInArray(pianoKey.whiteKeyId); changeStatus(pianoKey)">
         </div>
         <span *ngIf="pianoKey.blackKeyId" [style.background]="getColor(pianoKey.blackKeyId)"
               (click)="keyPress(pianoKey.blackKeyId, pianoKey)"></span>
@@ -15,7 +15,7 @@
   <br>
   <div style="background-color: white; padding: 24px;">
     <div>
-      <span class="key" *ngFor="let key of keyArray"><b>{{ key.name }}</b></span>
+      <span class="key" *ngFor="let key of keyArray" ><b>{{ key.name }}</b></span>
     </div>
     <div *ngIf="editMode">
       <br>

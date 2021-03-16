@@ -20,6 +20,7 @@ export class KeyboardComponent implements OnInit {
 
   randomKey = 40;
   keyArray: Key[] = [];
+  keyArray2: Key[] = [];
   keyName: { [key: number]: string } =
     {
       16: 'C0', 17: 'C#0', 18: 'D0', 19: 'D#0', 20: 'E0', 21: 'F0', 22: 'F#0', 23: 'G0', 24: 'G#0', 25: 'A0', 26: 'A#0', 27: 'B0',
@@ -94,42 +95,88 @@ export class KeyboardComponent implements OnInit {
 
   private playRandomKeys(nbBpm, nbOfKeys) {
     this.clearKeyArray();
-    const key = this.pianoKeys.find(k => k.whiteKeyId === this.selectedStartKey.id);
-    this.keyPress(this.selectedStartKey.id, key);
+    this.saveKeyInArray(this.selectedStartKey.id);
+    for (let j = 0; j < nbOfKeys - 1; j++) {
+      this.generateRandomArray();
+    }
+    console.log('this.keyArray2: ', this.keyArray2);
+    this.improveRandom();
+
     let i = 0;
-    const myLoopInterval = setInterval(() => {
-      let condition = this.getRandomKey(this.randomKey);
-      while (condition === false) {
-        condition = this.getRandomKey(this.randomKey);
-      }
-      const key = this.pianoKeys.find(k => k.whiteKeyId === this.randomKey);
-      this.keyPress(this.randomKey, key);
+    const playKeyInterval = setInterval(() => {
+      console.log('this.keyArray2: ', this.keyArray2);
+      const key = this.pianoKeys.find(k => k.whiteKeyId === this.keyArray2[i].id);
+      console.log('this.keyArray2[i].id: ', this.keyArray2[i].id);
+      this.keyPress(this.keyArray2[i].id, key);
       i++;
-      console.log(i);
-      console.log('this.keyArray: ', this.keyArray);
-      if (i >= nbOfKeys - 1) {
-        clearInterval(myLoopInterval);
+      if (i >= nbOfKeys) {
+        clearInterval(playKeyInterval);
       }
+
     }, this.bpmToMs(nbBpm));
   }
 
   private replayMelody(nbBpm, nbOfKeys) {
     const saveOldArray = this.keyArray;
     this.clearKeyArray();
-    let i = 0;
-    const myLoopInterval = setInterval(() => {
-      const key = this.pianoKeys.find(k => k.whiteKeyId === saveOldArray[i].id);
-      this.keyPress(saveOldArray[i].id, key);
-      i++;
+    let j = 0;
+    const playKeyInterval = setInterval(() => {
+      const key = this.pianoKeys.find(k => k.whiteKeyId === saveOldArray[j].id);
+      this.keyPress(saveOldArray[j].id, key);
+      this.saveKeyInArray(saveOldArray[j].id);
+      j++;
 
-      if (i >= nbOfKeys) {
-        clearInterval(myLoopInterval);
+      if (j >= nbOfKeys) {
+        clearInterval(playKeyInterval);
       }
     }, this.bpmToMs(nbBpm));
 
   }
 
+
   /// MELODY INTELLIGENCE ///
+
+  private improveRandom() {
+    const middleKey = Math.round((this.keyArray.length - 2) / 2);
+    this.keyArray[middleKey].id = this.keyArray[0].id;
+    this.keyArray[middleKey].name = this.keyArray[0].name;
+
+    let keyToTry = this.keyArray[0].id + this.getRandomInt();
+    let condition = this.isBlack(keyToTry) && this.isInPianoRange(keyToTry);
+    let beforeLastKey = {id: keyToTry, name: this.keyName[keyToTry]};
+
+    while (condition === false) {
+      keyToTry = this.keyArray[0].id + this.getRandomInt();
+      condition = this.isBlack(keyToTry) && this.isInPianoRange(keyToTry);
+      beforeLastKey = {id: keyToTry, name: this.keyName[keyToTry]};
+    }
+
+    let keyToTry2 = this.keyArray[0].id + this.getRandomInt();
+    let condition2 = this.isBlack(keyToTry2) && this.isInPianoRange(keyToTry2);
+    let lastKey = {id: keyToTry, name: this.keyName[keyToTry]};
+
+    while (condition2 === false) {
+      keyToTry2 = this.keyArray[0].id + this.getRandomInt();
+      condition2 = this.isBlack(keyToTry2) && this.isInPianoRange(keyToTry2);
+      lastKey = {id: keyToTry2, name: this.keyName[keyToTry2]};
+    }
+
+    this.keyArray[this.keyArray.length - 2].id = beforeLastKey.id;
+    this.keyArray[this.keyArray.length - 2].name = beforeLastKey.name;
+    this.keyArray[this.keyArray.length - 1].id = lastKey.id;
+    this.keyArray[this.keyArray.length - 1].name = lastKey.name;
+
+    this.keyArray2 = this.keyArray;
+  }
+
+  private generateRandomArray() {
+    let condition = this.getRandomKey(this.randomKey);
+    while (condition === false) {
+      condition = this.getRandomKey(this.randomKey);
+    }
+
+    this.saveKeyInArray(this.randomKey);
+  }
 
   private getRandomKey(nbMax: number) {
     this.randomKey = Math.floor(Math.random() * nbMax) + 16;
@@ -153,7 +200,6 @@ export class KeyboardComponent implements OnInit {
 
   keyPress(keyNumber: number, key: IPianoKey) {
     this.keyPlayed.emit(keyNumber);
-    this.saveKeyInArray(keyNumber);
     this.changeStatus(key);
   }
 
@@ -169,7 +215,7 @@ export class KeyboardComponent implements OnInit {
     key.status = true;
     setTimeout(() => {
       key.status = false;
-    }, 1000);
+    }, 300);
   }
 
   /// CONFIG ///
@@ -196,5 +242,10 @@ export class KeyboardComponent implements OnInit {
     const keyToChange = this.keyNameArray.find(k => k.name === key);
     currentKey = keyToChange;
     this.keyArray[i] = keyToChange;
+  }
+
+  private getRandomInt() {
+    // tslint:disable-next-line:no-bitwise
+    return [-2, -1, 0, 1, 2][Math.random() * 5 | 0];
   }
 }
